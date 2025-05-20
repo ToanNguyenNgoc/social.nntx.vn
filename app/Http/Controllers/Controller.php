@@ -38,4 +38,9 @@ class Controller extends BaseController
             'context' => $context
         ], ($status === true) ? 200: (($status === false) ? 400 : $status));
     }
+
+    public function onUserAuth()
+    {
+        return auth('sanctum')->user();
+    }
 }

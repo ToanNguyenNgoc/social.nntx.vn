@@ -122,5 +122,9 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+    'instance' => [
+        'instance_spa' => env('INSTANCE_SPA','abc@gmail.com'),
+        'instance_spa_password' => env('INSTANCE_SPA_PASSWORD','123123'),
+    ]
 
 ];
