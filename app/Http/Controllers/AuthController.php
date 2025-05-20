@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\UserRepo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +30,8 @@ class AuthController extends Controller
 
     public function profile()
     {
-        $user = $this->onUserAuth();;
+        $user = $this->onUserAuth();
+        $user['roles'] = $user->getRoleNames()->pluck('name');
         return $this->jsonResponse($user);
     }
 }

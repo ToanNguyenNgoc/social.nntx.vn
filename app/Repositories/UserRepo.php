@@ -34,6 +34,6 @@ class UserRepo extends BaseRepository
   }
   public function getIncludes(): array
   {
-    return [];
+    return ['roles'];
   }
 }
