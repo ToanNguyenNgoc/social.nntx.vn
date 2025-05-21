@@ -59,6 +59,7 @@ class Controller extends BaseController
                 'message' => $th->getMessage(),
                 'context' => null
             ], 400);
+            return false;
         }
         return true;
     }

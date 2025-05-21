@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,6 +50,7 @@ class User extends Authenticatable implements HasMedia
     protected $hidden = [
         'password',
         'remember_token',
+        'media'
     ];
 
     /**
@@ -86,5 +89,13 @@ class User extends Authenticatable implements HasMedia
     public function getAvatarAttribute(): null|string
     {
         return $this->getFirstMedia(MediaTemporary::COLLECTION_AVATAR)?->getFullUrl();
+    }
+    //Scope
+    public function scopeKeyword(Builder $query, string $value)
+    {
+        $value = '%' . $value . '%';
+        return $query->where('name', 'like', $value)
+            ->orWhere('telephone', 'like', $value)
+            ->orWhere('email', 'like', $value);
     }
 }

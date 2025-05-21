@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\Follow;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 
-class UserRepo extends BaseRepository
+class FollowRepo extends BaseRepository
 {
   public function __construct(Request $request)
   {
@@ -15,17 +15,19 @@ class UserRepo extends BaseRepository
 
   public function getModel(): string
   {
-    return User::class;
+    return Follow::class;
   }
   public function getSearchable(): array
   {
     return [
       AllowedFilter::scope('keyword'),
+      AllowedFilter::callback('is_accept', fn($builder, $value) => $builder->where('is_accept', boolval($value))),
+
     ];
   }
   public function getSorts(): array
   {
-    return ['-id', '-created_at'];
+    return [];
   }
   public function getOnlyFields(): array
   {
@@ -37,6 +39,6 @@ class UserRepo extends BaseRepository
   }
   public function getIncludes(): array
   {
-    return ['roles'];
+    return ['user', 'follower_user'];
   }
 }

@@ -12,4 +12,8 @@ class UserController extends Controller
   {
     return $this->jsonResponse($this->user_repo->paginate());
   }
+  public function show(int $id)
+  {
+    return $this->jsonResponse($this->user_repo->findOrFail($id));
+  }
 }
