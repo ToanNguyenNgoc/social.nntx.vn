@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MediaTemporary;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -20,8 +22,8 @@ class Controller extends BaseController
     public function jsonResponse(
         MessageBag|LengthAwarePaginator|Collection|array|null|Model|\Illuminate\Support\Collection|bool|Validator $context = [],
         bool|int $status = 200,
-        ?string $message = null): JsonResponse
-    {
+        ?string $message = null
+    ): JsonResponse {
         if ($context instanceof Model) {
             $context = $context->toArray();
         } else if ($context instanceof Validator) {
@@ -33,14 +35,31 @@ class Controller extends BaseController
         }
 
         return response()->json([
-            'status' => ($status === true) ? 200: (($status === false) ? 400 : $status),
+            'status' => ($status === true) ? 200 : (($status === false) ? 400 : $status),
             'message' => $message,
             'context' => $context
-        ], ($status === true) ? 200: (($status === false) ? 400 : $status));
+        ], ($status === true) ? 200 : (($status === false) ? 400 : $status));
     }
 
-    public function onUserAuth()
+    public function onUserAuth(): User
     {
         return auth('sanctum')->user();
+    }
+    public function addMediaToModel(Model $model, $media_id = null,  string $media_collection)
+    {
+        if (!$media_id) return;
+        $mediaTemporary = MediaTemporary::findOrFail($media_id);
+        try {
+            $pathToFile = $mediaTemporary->getFirstMedia(MediaTemporary::COLLECTION_TEMP);
+            $model->addMedia($pathToFile->getPath())->toMediaCollection($media_collection);
+            $mediaTemporary->delete();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 400,
+                'message' => $th->getMessage(),
+                'context' => null
+            ], 400);
+        }
+        return true;
     }
 }
