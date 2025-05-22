@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\MediaTemporary;
 use App\Models\Post;
 use App\Repositories\CommentRepo;
+use App\Utils\RegexUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,7 +29,7 @@ class CommentController extends Controller
         $validator = Validator::make($request->all(), [
             'commentable_id'    => 'required',
             'commentable_type'  => 'required|in:' . Comment::COMMENTABLE_TYPE_POST . ',' . Comment::COMMENTABLE_TYPE_REPLY,
-            'body'              => 'required',
+            'body'              => ['required', 'string', RegexUtils::REGEX_TAGS],
             'media_ids'         => 'array',
             'media_ids.*'       => 'required|integer'
         ]);
@@ -49,5 +50,22 @@ class CommentController extends Controller
             }
         }
         return $this->jsonResponse($comment);
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'body' => ['required', 'string', RegexUtils::REGEX_TAGS],
+        ]);
+        if ($validator->fails()) return $this->jsonResponse($validator->errors(), 400, 'Validation Fail');
+        $comment = Comment::where('user_id', $this->onUserAuth()->id)->findOrFail($id);
+        $comment->update($request->only(['body']));
+        return $this->jsonResponse($comment->refresh());
+    }
+
+    public function destroy(int $id)
+    {
+        Comment::where('user_id', $this->onUserAuth()->id)->findOrFail($id)->delete();
+        $this->jsonResponse([], 202);
     }
 }

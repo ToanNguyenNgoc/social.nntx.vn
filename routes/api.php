@@ -38,5 +38,7 @@ Route::middleware('throttle:api')->group(function () {
         Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
         Route::get('/comments/{id}', [CommentController::class, 'show'])->name('comments.show');
         Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+        Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+        Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
     });
 });

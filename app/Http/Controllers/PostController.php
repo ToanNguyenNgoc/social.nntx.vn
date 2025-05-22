@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ValidateTagHelper;
 use App\Models\MediaTemporary;
 use App\Models\Post;
 use App\Repositories\PostRepo;
+use App\Utils\RegexUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-use function PHPUnit\Framework\returnSelf;
 
 class PostController extends Controller
 {
@@ -28,7 +29,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'content'       => 'required',
+            'content'       => ['required', 'string', RegexUtils::REGEX_TAGS],
             'media_ids'     => 'array',
             'media_ids.*'   => 'required|integer'
         ]);

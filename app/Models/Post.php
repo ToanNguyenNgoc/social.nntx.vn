@@ -35,7 +35,8 @@ class Post extends Model implements HasMedia
 
     protected $appends = [
         'media_urls',
-        'comment_count'
+        'comment_count',
+        'favorite_count'
     ];
 
     protected $hidden = ['media'];
@@ -82,5 +83,15 @@ class Post extends Model implements HasMedia
     public function getCommentCountAttribute(): int
     {
         return $this->comments()->count();
+    } 
+
+    public function favorites(): MorphMany
+    {
+        return $this->morphMany(Favorite::class, 'favoritetable');
+    }
+
+    public function getFavoriteCountAttribute(): int
+    {
+        return $this->favorites()->count();
     }
 }

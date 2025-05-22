@@ -19,6 +19,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+
     public function jsonResponse(
         MessageBag|LengthAwarePaginator|Collection|array|null|Model|\Illuminate\Support\Collection|bool|Validator $context = [],
         bool|int $status = 200,
