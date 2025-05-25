@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // API group middleware
         $middleware->alias([
             'auth' => \App\Http\Middleware\ApiAuthenticate::class,
+            'recaptcha' => \App\Http\Middleware\VerifyRecaptcha::class,
+            'check_topic_joined' => \App\Http\Middleware\CheckTopicJoined::class,
         ]);
         $middleware->group('api', [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class

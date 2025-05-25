@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Post;
+use App\Models\Topic;
 use Illuminate\Http\Request;
-use Spatie\QueryBuilder\AllowedFilter;
 
-class PostRepo extends BaseRepository
+class TopicRepo extends BaseRepository
 {
   public function __construct(Request $request)
   {
@@ -15,14 +14,11 @@ class PostRepo extends BaseRepository
 
   public function getModel(): string
   {
-    return Post::class;
+    return Topic::class;
   }
   public function getSearchable(): array
   {
-    return [
-      AllowedFilter::scope('keyword'),
-      AllowedFilter::callback('status', fn($builder, $value) => $builder->where('status', boolval($value))),
-    ];
+    return [];
   }
   public function getSorts(): array
   {
@@ -39,8 +35,7 @@ class PostRepo extends BaseRepository
   public function getIncludes(): array
   {
     return [
-      'user',
-      'favorites'
+      'users'
     ];
   }
 }

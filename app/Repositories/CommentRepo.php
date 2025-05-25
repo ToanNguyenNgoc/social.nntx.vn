@@ -47,6 +47,6 @@ class CommentRepo extends BaseRepository
   }
   public function getIncludes(): array
   {
-    return ['user'];
+    return ['user','favorites'];
   }
 }

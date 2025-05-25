@@ -2,16 +2,19 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:api')->group(function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         Route::post('/login', [AuthController::class, 'login'])->name('login');
-        Route::post('/register', [AuthController::class, 'register'])->name('register');
+        Route::post('/register', [AuthController::class, 'register'])->name('register')->middleware(['recaptcha']);
     });
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
@@ -40,5 +43,19 @@ Route::middleware('throttle:api')->group(function () {
         Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
         Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
         Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+        //Favorite
+        Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+        Route::get('/favorites/{id}', [FavoriteController::class, 'show'])->name('favorites.show');
+        Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.store');
+        Route::delete('/favorites', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+        //Topic
+        Route::get('/topics', [TopicController::class, 'index'])->name('topics.index');
+        Route::get('/topics/{id}', [TopicController::class, 'show'])->name('topics.show');
+        Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
+        Route::delete('/topics/{id}', [TopicController::class, 'destroy'])->name('topics.destroy');
+        //Message
+        Route::get('/messages', [MessageController::class, 'index'])->name('messages.index')->middleware(['check_topic_joined']);
+        Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show')->middleware(['check_topic_joined']);
+        Route::post('/messages', [MessageController::class, 'store'])->name('messages.store')->middleware(['check_topic_joined']);
     });
 });

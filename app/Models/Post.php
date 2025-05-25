@@ -36,7 +36,8 @@ class Post extends Model implements HasMedia
     protected $appends = [
         'media_urls',
         'comment_count',
-        'favorite_count'
+        'favorite_count',
+        'is_favorite'
     ];
 
     protected $hidden = ['media'];
@@ -83,15 +84,21 @@ class Post extends Model implements HasMedia
     public function getCommentCountAttribute(): int
     {
         return $this->comments()->count();
-    } 
+    }
 
     public function favorites(): MorphMany
     {
-        return $this->morphMany(Favorite::class, 'favoritetable');
+        return $this->morphMany(Favorite::class, 'favoritetable')->with(['user']);
     }
 
     public function getFavoriteCountAttribute(): int
     {
         return $this->favorites()->count();
+    }
+
+    public function getIsFavoriteAttribute(): bool
+    {
+        if (!auth('sanctum')->check()) return false;
+        return $this->favorites()->where('user_id', auth('sanctum')->user()->id)->exists();
     }
 }

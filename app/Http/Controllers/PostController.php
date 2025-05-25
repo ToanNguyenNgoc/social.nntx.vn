@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ValidateTagHelper;
+use App\Jobs\VerifyRegisterMail;
+use App\Mail\VerifyRegister;
 use App\Models\MediaTemporary;
 use App\Models\Post;
 use App\Repositories\PostRepo;
 use App\Utils\RegexUtils;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -18,6 +20,8 @@ class PostController extends Controller
 
     public function index()
     {
+        // Mail::to('5751071044@st.utc2.edu.vn')->send(new VerifyRegister());
+        VerifyRegisterMail::dispatch();
         return $this->jsonResponse($this->post_repo->paginate());
     }
 

@@ -125,6 +125,9 @@ return [
     'instance' => [
         'instance_spa' => env('INSTANCE_SPA','abc@gmail.com'),
         'instance_spa_password' => env('INSTANCE_SPA_PASSWORD','123123'),
-    ]
+    ],
+    
+    'recaptcha_site_key' => env('RECAPTCHA_SITE_KEY',''),
+    'recaptcha_server_secret_key' => env('RECAPTCHA_SERVER_SECRET_KEY',''),
 
 ];

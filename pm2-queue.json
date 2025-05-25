@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "social.nntx.vn.jobs",
+      "script": "php artisan queue:work --sleep=3 --tries=5 --timeout=10 --queue=spares_request,save_logs,default",
+      "node_args": ""
+    }
+  ]
+}

@@ -42,7 +42,7 @@ class Controller extends BaseController
         ], ($status === true) ? 200 : (($status === false) ? 400 : $status));
     }
 
-    public function onUserAuth(): User
+    public function onUserAuth()
     {
         return auth('sanctum')->user();
     }
