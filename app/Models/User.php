@@ -19,7 +19,7 @@ class User extends Authenticatable implements HasMedia
     use HasFactory, Notifiable, HasRoles, HasApiTokens, InteractsWithMedia;
 
     protected $connection = 'mysql';
-    protected string $guard_name = 'api';
+    protected $guard_name = 'api';
 
     const ROLE_SUPER_ADMIN = 'SUPER_ADMIN';
     const ROLE_ADMIN = 'ADMIN';
@@ -73,6 +73,7 @@ class User extends Authenticatable implements HasMedia
     }
     protected $appends = [
         'avatar',
+        'is_follow',
     ];
     public function registerMediaCollections(): void
     {
@@ -91,6 +92,22 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->getFirstMedia(MediaTemporary::COLLECTION_AVATAR)?->getFullUrl();
     }
+    
+    public function followers()
+    {
+        return $this->hasMany(Follow::class,'user_id', 'id');
+    }
+
+    public function getIsFollowAttribute():bool
+    {
+        return $this->followers()->where('follower_user_id',  auth('sanctum')->user()->id)->exists();
+    }
+
+    public function getFollowerCountAttribute():int
+    {
+        return $this->followers()->count();
+    }
+
     //Scope
     public function scopeKeyword(Builder $query, string $value)
     {
