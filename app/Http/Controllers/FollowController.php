@@ -14,8 +14,7 @@ class FollowController extends Controller
 
     public function index(Request $request)
     {
-        $my = $this->onUserAuth();
-        $follows = $this->follow_repo->filter->where('user_id', $request->has('user_id') ? $request->get('user_id') : $my->id);
+        $follows = $this->follow_repo;
         return $this->jsonResponse($follows->paginate());
     }
     public function store(Request $request) //Start follow user
