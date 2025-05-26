@@ -16,9 +16,12 @@ class VerifyRegister extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    private $email;
+    private $otp;
+    public function __construct(string $email, string $otp)
     {
-        //
+        $this->email = $email;
+        $this->otp = $otp;
     }
 
     /**
@@ -38,6 +41,10 @@ class VerifyRegister extends Mailable
     {
         return new Content(
             view: 'emails.verify-register',
+            with: [
+                'email' => $this->email,
+                'otp' => $this->otp,
+            ]
         );
     }
 

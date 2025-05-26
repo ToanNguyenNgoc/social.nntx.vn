@@ -39,7 +39,8 @@ class User extends Authenticatable implements HasMedia
         'telephone',
         'active',
         'birthday',
-        'gender'
+        'gender',
+        'email_verified_at'
     ];
 
     /**
