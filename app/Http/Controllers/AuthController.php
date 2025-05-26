@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\VerifyRegisterMail;
 use App\Models\MediaTemporary;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,6 +39,7 @@ class AuthController extends Controller
         ]);
         if ($validator->fails()) return $this->jsonResponse($validator->errors(), 400, 'Validation Fail');
         $user = User::create($request->all());
+        VerifyRegisterMail::dispatch($request->get('email'),'123123');
         return $this->jsonResponse($user->refresh());
     }
 

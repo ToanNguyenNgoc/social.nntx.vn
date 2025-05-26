@@ -14,9 +14,13 @@ class VerifyRegisterMail implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    private $email;
+    private $otp;
+    public function __construct(string $email, string $otp)
     {
         //
+        $this->email = $email;
+        $this->otp = $otp;
     }
 
     /**
@@ -25,6 +29,6 @@ class VerifyRegisterMail implements ShouldQueue
     public function handle(): void
     {
         //
-        // Mail::to('toan@myspa.vn')->send(new VerifyRegister());
+        Mail::to($this->email)->send(new VerifyRegister());
     }
 }
