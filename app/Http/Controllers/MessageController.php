@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MyEvent;
+use App\Events\SubscribeChat;
 use App\Models\MediaTemporary;
 use App\Repositories\MessageRepo;
 use App\Utils\RegexUtils;
@@ -34,7 +36,8 @@ class MessageController extends Controller
         $validator = Validator::make($request->all(), [
             'body'          => ['string', RegexUtils::REGEX_TAGS],
             'media_ids'     => 'array',
-            'media_ids.*'   => 'required|integer'
+            'media_ids.*'   => 'required|integer',
+            'reply_id'      => 'exists:messages,id'
         ]);
         $media_ids = $request->has('media_ids') ? $request->get('media_ids') : [];
         if ($validator->fails() || (!$request->has('body') && count($media_ids) == 0)) {
@@ -45,9 +48,15 @@ class MessageController extends Controller
             'topic_id' => $topic->id,
             'body' => $request->get('body'),
             'user_id' => $this->user->id,
+            'reply_id' => $request->get('reply_id'),
         ]);
         foreach ($media_ids as $media_id) {
             $this->addMediaToModel($message, $media_id, MediaTemporary::COLLECTION_MESSAGE);
+        }
+        $topic = $request->get('topic');
+        $topic->load('users');
+        foreach ($topic->users as $user) {
+            broadcast(new SubscribeChat($message, $user->id));
         }
         return $this->jsonResponse($message->refresh());
     }

@@ -34,6 +34,6 @@ class MessageRepo extends BaseRepository
   }
   public function getIncludes(): array
   {
-    return ['favorites'];
+    return ['favorites','reply'];
   }
 }

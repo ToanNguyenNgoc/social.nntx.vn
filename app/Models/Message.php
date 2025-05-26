@@ -23,7 +23,8 @@ class Message extends Model implements HasMedia
     protected $fillable = [
         'body',
         'user_id',
-        'topic_id'
+        'topic_id',
+        'reply_id'
     ];
 
     protected $casts = [
@@ -86,5 +87,10 @@ class Message extends Model implements HasMedia
     {
         if (!auth('sanctum')->check()) return false;
         return $this->favorites()->where('user_id', auth('sanctum')->user()->id)->exists();
+    }
+
+    public function reply()
+    {
+        return $this->belongsTo(Message::class, 'reply_id', 'id');
     }
 }

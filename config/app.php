@@ -123,11 +123,23 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
     'instance' => [
-        'instance_spa' => env('INSTANCE_SPA','abc@gmail.com'),
-        'instance_spa_password' => env('INSTANCE_SPA_PASSWORD','123123'),
+        'instance_spa' => env('INSTANCE_SPA', 'abc@gmail.com'),
+        'instance_spa_password' => env('INSTANCE_SPA_PASSWORD', '123123'),
     ],
-    
-    'recaptcha_site_key' => env('RECAPTCHA_SITE_KEY',''),
-    'recaptcha_server_secret_key' => env('RECAPTCHA_SERVER_SECRET_KEY',''),
+
+    'recaptcha_site_key' => env('RECAPTCHA_SITE_KEY', ''),
+    'recaptcha_server_secret_key' => env('RECAPTCHA_SERVER_SECRET_KEY', ''),
+
+    'pusher' => [
+        'driver' => 'pusher',
+        'key' => env('PUSHER_APP_KEY'),
+        'secret' => env('PUSHER_APP_SECRET'),
+        'app_id' => env('PUSHER_APP_ID'),
+        'options' => [
+            'cluster' => env('PUSHER_APP_CLUSTER'),
+            'useTLS' => true,
+        ],
+    ],
+
 
 ];
