@@ -28,12 +28,12 @@ class FollowController extends Controller
         if ($request->get('follower_user_id') == $user->id) return $this->jsonResponse([], 400, 'You can not flow yourself');
         $flow = Follow::firstOrCreate(
             [
-                'user_id' => $user->id,
-                'follower_user_id' => $request->get('follower_user_id')
+                'user_id' => $request->get('follower_user_id'),
+                'follower_user_id' => $user->id,
             ],
             [
-                'user_id' => $user->id,
-                'follower_user_id' => $request->get('follower_user_id')
+                'user_id' => $request->get('follower_user_id'),
+                'follower_user_id' => $user->id
             ]
         );
         return $this->jsonResponse($flow);
@@ -41,7 +41,7 @@ class FollowController extends Controller
     public function delete(int $follower_user_id) //Unfollow user
     {
         $my_id = $this->onUserAuth()->id;
-        $follow = Follow::where('user_id', $my_id)->where('follower_user_id', $follower_user_id)->first();
+        $follow = Follow::where('user_id', $follower_user_id)->where('follower_user_id', $my_id)->first();
         $follow->delete();
         return $this->jsonResponse([], 202);
     }
