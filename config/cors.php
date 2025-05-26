@@ -5,14 +5,12 @@ return [
   'paths' => [
     'api/*',
     'broadcasting/auth',
-    'sanctum/csrf-cookie', // nếu bạn dùng Sanctum
+    'sanctum/csrf-cookie',
   ],
 
   'allowed_methods' => ['*'],
 
-  'allowed_origins' => [
-    'http://localhost:5173', // React app
-  ],
+  'allowed_origins' => array_map('trim', explode(',', env('ALLOWED_ORIGINS', '*'))),
 
   'allowed_origins_patterns' => [],
 
@@ -22,6 +20,6 @@ return [
 
   'max_age' => 0,
 
-  'supports_credentials' => true, // quan trọng nếu bạn dùng cookie / auth
+  'supports_credentials' => true,
 
 ];

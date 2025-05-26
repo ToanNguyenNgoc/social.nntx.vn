@@ -6,7 +6,7 @@ class CommonUtils
 {
   static function generateOTP($length = 6)
   {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $otp = '';
     for ($i = 0; $i < $length; $i++) {
       $otp .= $characters[random_int(0, strlen($characters) - 1)];
