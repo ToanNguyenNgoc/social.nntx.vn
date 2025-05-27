@@ -36,6 +36,10 @@ class Follow extends Model
     {
         return $this->belongsTo(User::class, 'follower_user_id', 'id');
     }
+    public function following_user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
     //Scope
     public function scopeKeyword(Builder $query, string $value)
     {

@@ -40,6 +40,6 @@ class FollowRepo extends BaseRepository
   }
   public function getIncludes(): array
   {
-    return ['user', 'follower_user'];
+    return ['user', 'follower_user','following_user'];
   }
 }
