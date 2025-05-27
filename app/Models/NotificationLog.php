@@ -18,6 +18,7 @@ class NotificationLog extends Model
         'message',
         'type_id',
         'payload_id',
+        'sender_id',
         'received_id',
     ];
 
@@ -26,4 +27,9 @@ class NotificationLog extends Model
         'updated_at' => 'datetime:Y-m-d H:i:s',
         'deleted_at' => 'datetime:Y-m-d H:i:s',
     ];
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id', 'id');
+    }
 }

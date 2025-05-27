@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MyEvent;
-use App\Events\SubscribeChat;
+use App\Events\ChatEvent;
+use App\Events\NotificationEvent;
 use App\Models\MediaTemporary;
 use App\Repositories\MessageRepo;
 use App\Utils\RegexUtils;
@@ -44,6 +44,8 @@ class MessageController extends Controller
             return $this->jsonResponse($validator->errors(), 400, 'Validation Fail');
         }
         $topic = $request->get('topic');
+        $topic->updated_at = now();
+        $topic->save();
         $message = $this->message_repo->create([
             'topic_id' => $topic->id,
             'body' => $request->get('body'),
@@ -56,7 +58,16 @@ class MessageController extends Controller
         $topic = $request->get('topic');
         $topic->load('users');
         foreach ($topic->users as $user) {
-            broadcast(new SubscribeChat($message, $user->id));
+            broadcast(new ChatEvent($message, $user->id));
+            if ($this->onUserAuth()->id !== $user->id) {
+                broadcast(new NotificationEvent(
+                    $this->onUserAuth()->name . ' đã gửi tin nhắn',
+                    $topic->id,
+                    $this->onUserAuth()->id,
+                    $user->id,
+                    NotificationEvent::NOTI_TYPE_CHAT_MESSAGE
+                ));
+            }
         }
         return $this->jsonResponse($message->refresh());
     }

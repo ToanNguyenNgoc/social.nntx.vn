@@ -39,6 +39,7 @@ class FollowController extends Controller
         broadcast(new NotificationEvent(
             $user->name . ' đã bắt đầu theo dõi bạn',
             $user->id,
+            $user->id,
             $request->get('follower_user_id'),
             NotificationEvent::NOTI_TYPE_START_FOLLOW
         ));

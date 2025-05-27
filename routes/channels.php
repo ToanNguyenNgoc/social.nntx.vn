@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('subscribe-chat.user_id.{userId}', function ($user, $userId) {
+Broadcast::channel('subscribe-notification.user_id.{userId}', function () {
   return auth('sanctum')->check();
 });
-Broadcast::channel('subscribe-notification.user_id.{userId}', function ($user, $userId) {
+
+Broadcast::channel('subscribe-topic_id.${topicId}', function ($topicId) {
   return auth('sanctum')->check();
 });

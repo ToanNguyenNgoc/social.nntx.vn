@@ -6,10 +6,10 @@ use App\Models\Message;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Support\Facades\Log;
 
-class SubscribeChat implements ShouldBroadcast
+class ChatEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -24,13 +24,14 @@ class SubscribeChat implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        // return ['private-subscribe-chat.user_id.' . $this->user_id];
-        return ['private-subscribe-notification.user_id.' . $this->user_id];
+        return [
+            new PrivateChannel('subscribe-topic_id.', $this->message->topic_id),
+        ];
     }
 
     public function broadcastAs()
     {
-        return 'emit-subscribe-chat';
+        return 'emit-topic';
     }
 
     public function broadcastWith()

@@ -22,7 +22,7 @@ class TopicRepo extends BaseRepository
   }
   public function getSorts(): array
   {
-    return ['-id', '-created_at'];
+    return ['-id', '-created_at', '-updated_at'];
   }
   public function getOnlyFields(): array
   {

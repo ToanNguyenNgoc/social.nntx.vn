@@ -15,6 +15,7 @@ class NotificationEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     const NOTI_TYPE_START_FOLLOW = 1;
+    const NOTI_TYPE_CHAT_MESSAGE = 2;
 
     /**
      * Create a new event instance.
@@ -22,14 +23,16 @@ class NotificationEvent implements ShouldBroadcast
 
     private $message;
     private $payload_id;
+    private $sender_id;
     private $user_id;
     private $type;
 
-    public function __construct(string $message, int $payload_id, int $user_id, int $type)
+    public function __construct(string $message, int $payload_id, int $sender_id,  int $user_id, int $type)
     {
         //
         $this->message = $message;
         $this->payload_id = $payload_id;
+        $this->sender_id = $sender_id;
         $this->user_id = $user_id;
         $this->type = $type;
     }
@@ -57,8 +60,10 @@ class NotificationEvent implements ShouldBroadcast
             'message' => $this->message,
             'payload_id' => $this->payload_id,
             'type_id' => $this->type,
+            'sender_id' => $this->sender_id,
             'received_id' => $this->user_id
         ]);
+        $notification->load('sender');
         return ['message' => $notification];
     }
 }

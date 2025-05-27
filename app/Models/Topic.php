@@ -19,7 +19,8 @@ class Topic extends Model
 
     protected $fillable = [
         'name',
-        'type'
+        'type',
+        'updated_at'
     ];
 
     protected $appends = [];
