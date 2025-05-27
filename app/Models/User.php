@@ -92,18 +92,19 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->getFirstMedia(MediaTemporary::COLLECTION_AVATAR)?->getFullUrl();
     }
-    
+
     public function followers()
     {
-        return $this->hasMany(Follow::class,'user_id', 'id');
+        return $this->hasMany(Follow::class, 'user_id', 'id');
     }
 
-    public function getIsFollowAttribute():bool
+    public function getIsFollowAttribute(): bool
     {
+        if (!auth('sanctum')->check()) return false;
         return $this->followers()->where('follower_user_id',  auth('sanctum')->user()->id)->exists();
     }
 
-    public function getFollowerCountAttribute():int
+    public function getFollowerCountAttribute(): int
     {
         return $this->followers()->count();
     }
