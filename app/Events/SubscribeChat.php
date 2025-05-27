@@ -24,8 +24,8 @@ class SubscribeChat implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        Log::info('chat', ['data' => 'private-subscribe-chat.user_id.' . $this->user_id]);
-        return ['private-subscribe-chat.user_id.' . $this->user_id];
+        // return ['private-subscribe-chat.user_id.' . $this->user_id];
+        return ['private-subscribe-notification.user_id.' . $this->user_id];
     }
 
     public function broadcastAs()

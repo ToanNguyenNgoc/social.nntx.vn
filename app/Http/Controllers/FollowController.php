@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationEvent;
 use App\Models\Follow;
 use App\Repositories\FollowRepo;
 use Illuminate\Support\Facades\Validator;
@@ -35,6 +36,12 @@ class FollowController extends Controller
                 'follower_user_id' => $user->id
             ]
         );
+        broadcast(new NotificationEvent(
+            $user->name . ' đã bắt đầu theo dõi bạn',
+            $user->id,
+            $request->get('follower_user_id'),
+            NotificationEvent::NOTI_TYPE_START_FOLLOW
+        ));
         return $this->jsonResponse($flow);
     }
     public function delete(int $follower_user_id) //Unfollow user
