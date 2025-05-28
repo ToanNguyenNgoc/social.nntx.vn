@@ -27,7 +27,14 @@ class TopicController extends Controller
 
     public function show(int $id)
     {
-        return $this->jsonResponse([]);
+        $topic = $this->topic_repo->filter
+            ->where('id', $id)
+            ->whereHas('topicUsers', function ($query) {
+                $query->where('user_id', $this->user->id)->whereNotNull('joined_at');
+            })
+            ->first();
+        if (!$topic) return $this->jsonResponse([], 404);
+        return $this->jsonResponse($topic);
     }
 
     public function store(Request $request)
