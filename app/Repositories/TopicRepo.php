@@ -35,7 +35,9 @@ class TopicRepo extends BaseRepository
   public function getIncludes(): array
   {
     return [
-      'users'
+      'users',
+      'messages',
+      'last_message'
     ];
   }
 }
