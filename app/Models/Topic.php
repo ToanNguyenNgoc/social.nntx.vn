@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LocalizesTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Topic extends Model
 {
     //
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LocalizesTimestamps;
     //
     protected $connection = 'mysql';
     protected string $guard_name = 'api';

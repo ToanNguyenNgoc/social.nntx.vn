@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LocalizesTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Otp extends Model
 {
     //
-    use HasFactory;
+    use HasFactory, LocalizesTimestamps;
     //
     protected $connection = 'mysql';
     protected $guard_name = 'api';

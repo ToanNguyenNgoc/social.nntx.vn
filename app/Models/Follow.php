@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\LocalizesTimestamps;
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Follow extends Model
 {
+    use LocalizesTimestamps;
     //
     protected $connection = 'mysql';
     protected string $guard_name = 'api';

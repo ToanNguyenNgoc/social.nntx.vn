@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LocalizesTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TopicUser extends Model
 {
     //
-    use HasFactory;
+    use HasFactory, LocalizesTimestamps;
     //
     protected $connection = 'mysql';
     protected string $guard_name = 'api';

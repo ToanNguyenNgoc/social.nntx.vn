@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LocalizesTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -12,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Message extends Model implements HasMedia
 {
     //
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, SoftDeletes, InteractsWithMedia, LocalizesTimestamps;
     protected $connection = 'mysql';
     protected string $guard_name = 'api';
 
