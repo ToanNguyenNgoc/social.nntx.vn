@@ -59,15 +59,13 @@ class MessageController extends Controller
         $topic->load('users');
         foreach ($topic->users as $user) {
             broadcast(new ChatEvent($message, $user->id));
-            if ($this->onUserAuth()->id !== $user->id) {
-                broadcast(new NotificationEvent(
-                    $this->onUserAuth()->name . ' đã gửi tin nhắn',
-                    $topic->id,
-                    $this->onUserAuth()->id,
-                    $user->id,
-                    NotificationEvent::NOTI_TYPE_CHAT_MESSAGE
-                ));
-            }
+            broadcast(new NotificationEvent(
+                $this->onUserAuth()->name . ' đã gửi tin nhắn',
+                $topic->id,
+                $this->onUserAuth()->id,
+                $user->id,
+                NotificationEvent::NOTI_TYPE_CHAT_MESSAGE
+            ));
         }
         return $this->jsonResponse($message->refresh());
     }

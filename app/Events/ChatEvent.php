@@ -8,6 +8,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Log;
 
 class ChatEvent implements ShouldBroadcast
 {
@@ -25,7 +26,7 @@ class ChatEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         return [
-            new PrivateChannel('subscribe-topic_id.', $this->message->topic_id),
+            new PrivateChannel('subscribe-topic_id.' . $this->message->topic_id),
         ];
     }
 
