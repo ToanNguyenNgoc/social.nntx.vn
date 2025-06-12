@@ -22,6 +22,7 @@ Route::post('/broadcasting/auth', function (Request $request) {
 Route::middleware('throttle:api')->group(function () {
     Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
         Route::post('/login', [AuthController::class, 'login'])->name('login');
+        Route::post('/login/google', [AuthController::class, 'loginGoogle'])->name('loginGoogle');
         Route::post('/register', [AuthController::class, 'register'])->name('register')->middleware(['recaptcha']);
     });
     Route::group(['middleware' => 'auth:sanctum'], function () {

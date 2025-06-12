@@ -6,16 +6,16 @@ use App\Jobs\VerifyRegisterMail;
 use App\Models\MediaTemporary;
 use App\Models\Otp;
 use App\Models\User;
+use App\Utils\CommonUtils;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     //
-    public function login(Request $request)
+    public function login(Request $request, $withPassword = true)
     {
         $validator = Validator::make($request->all(), [
             'email'     => 'required|email',
@@ -27,9 +27,44 @@ class AuthController extends Controller
         $user = User::where('email', $request->get('email'))->first();
         if (!$user) return $this->jsonResponse([], 404, 'User not found');
         if (!$user->email_verified_at) return $this->jsonResponse([], 400, 'Account is not verify!');
-        if (!Hash::check($request->get('password'), $user->password)) return $this->jsonResponse([], 401, 'Wrong password');
+        if($withPassword == true){
+            if (!Hash::check($request->get('password'), $user->password)) return $this->jsonResponse([], 401, 'Wrong password');
+        }
         $user->token = $user->createToken('api_token')->plainTextToken;
         return $this->jsonResponse($user);
+    }
+
+    public function loginGoogle(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'credential'     => 'required'
+        ]);
+        if ($validator->fails()) {
+            return $this->jsonResponse($validator->errors(), 400, 'Validation Fail');
+        }
+        $credential = $request->get('credential');
+        $payload = CommonUtils::decodeJwtPayload($credential);
+        if (!$payload || !$payload['email']) {
+            return $this->jsonResponse([], 403, 'Invalidate code from Google');
+        }
+
+        $user = User::firstOrCreate(
+            ['email' => $payload['email']],
+            [
+                'name' => $payload['name'] ?? $payload['email'],
+                'email_verified_at' => now(),
+                'password' => $payload['iat'],
+                'platform' => User::PLATFORM_REGISTER_GOOGLE,
+                'avatar_social_url' => $payload['picture'],
+            ]
+        );
+
+        $request->replace([
+            'email' => $user->email,
+            'password' => $user->email,
+        ]);
+
+        return $this->login($request, false);
     }
 
     public function register(Request $request)

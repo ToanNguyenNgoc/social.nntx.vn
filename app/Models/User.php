@@ -28,6 +28,9 @@ class User extends Authenticatable implements HasMedia
     const MAN = 1;
     const FEMALE = 2;
 
+    const PLATFORM_REGISTER = 'client';
+    const PLATFORM_REGISTER_GOOGLE = 'google';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -41,7 +44,9 @@ class User extends Authenticatable implements HasMedia
         'active',
         'birthday',
         'gender',
-        'email_verified_at'
+        'email_verified_at',
+        'avatar_social_url',
+        'platform'
     ];
 
     /**
@@ -52,7 +57,8 @@ class User extends Authenticatable implements HasMedia
     protected $hidden = [
         'password',
         'remember_token',
-        'media'
+        'media',
+        'avatar_social_url'
     ];
 
     /**
@@ -90,8 +96,10 @@ class User extends Authenticatable implements HasMedia
             ->singleFile();
     }
     public function getAvatarAttribute(): null|string
-    {
-        return $this->getFirstMedia(MediaTemporary::COLLECTION_AVATAR)?->getFullUrl();
+    {   
+        $avatar = $this->getFirstMedia(MediaTemporary::COLLECTION_AVATAR)?->getFullUrl();
+        if($avatar) return $avatar;
+        return $this->avatar_social_url;
     }
 
     public function followers()
