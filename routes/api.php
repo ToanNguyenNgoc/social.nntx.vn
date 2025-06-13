@@ -6,7 +6,9 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -34,6 +36,14 @@ Route::middleware('throttle:api')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('users.index');
             Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
         });
+        //Role & Permission
+        Route::get('/roles', [RoleController::class, 'index'])->name('roles.index')->middleware(['permission:roles.index']);
+        Route::get('/roles/{id}', [RoleController::class, 'show'])->name('roles.show')->middleware(['permission:roles.show']);
+        Route::post('/roles', [RoleController::class, 'store'])->name('roles.store')->middleware(['permission:roles.store']);
+        Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update')->middleware(['permission:roles.update']);
+        Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy')->middleware(['permission:roles.destroy']);
+
+        Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index')->middleware(['permission:permissions.index']);
         //Media
         Route::post('/media', [MediaController::class, 'store'])->name('media.store');
         //Flow

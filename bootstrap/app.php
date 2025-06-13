@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \App\Http\Middleware\ApiAuthenticate::class,
             'recaptcha' => \App\Http\Middleware\VerifyRecaptcha::class,
             'check_topic_joined' => \App\Http\Middleware\CheckTopicJoined::class,
+            'permission' => \App\Http\Middleware\PermissionMiddleware::class,
         ]);
         $middleware->group('api', [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class
