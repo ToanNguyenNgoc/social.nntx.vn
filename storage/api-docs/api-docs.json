@@ -1,0 +1,219 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "XSocial Laravel API",
+        "description": "✊✊✊",
+        "contact": {
+            "email": "ngoctoan06011998@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "8dcb70df1020986038d098cc08d05dae",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/auth/login/google": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "abc051ca50261bea9490fdc064bea7ba",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "credential"
+                                ],
+                                "properties": {
+                                    "credential": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "d764dd091cc4494ae0baf360b03319f3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "recaptcha"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "telephone": {
+                                        "type": "string",
+                                        "format": "0987654321"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "gender": {
+                                        "type": "number",
+                                        "format": "number"
+                                    },
+                                    "recaptcha": {
+                                        "type": "string",
+                                        "format": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/auth/profile": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "6d010834430854e4df1a215e5771aa96",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/profile-update": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "16148f0c834e1de5972776451a7a2796",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "telephone": {
+                                        "type": "string",
+                                        "format": "0987654321"
+                                    },
+                                    "gender": {
+                                        "type": "number",
+                                        "format": "number"
+                                    },
+                                    "birthday": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2000-01-01"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Bearer {token}"
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
+}

@@ -14,7 +14,24 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    //
+    /**
+     * @OA\Post(
+     *     path="/api/auth/login",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="12345678")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function login(Request $request, $withPassword = true)
     {
         $validator = Validator::make($request->all(), [
@@ -34,6 +51,23 @@ class AuthController extends Controller
         return $this->jsonResponse($user);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/auth/login/google",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"credential"},
+     *             @OA\Property(property="credential", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function loginGoogle(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -67,6 +101,27 @@ class AuthController extends Controller
         return $this->login($request, false);
     }
 
+     /**
+     * @OA\Post(
+     *     path="/api/auth/register",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password","recaptcha"},
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="telephone", type="string", format="0987654321"),
+     *             @OA\Property(property="password", type="string", format="password"),
+     *             @OA\Property(property="gender", type="number", format="number"),
+     *             @OA\Property(property="recaptcha", type="string", format="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -100,12 +155,45 @@ class AuthController extends Controller
         return $this->jsonResponse($user->refresh());
     }
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/auth/profile",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function profile()
     {
         $user = $this->onUserAuth();
         $user['roles'] = $user->getRoleNames()->pluck('name');
         return $this->jsonResponse($user);
     }
+
+     /**
+     * @OA\Post(
+     *     path="/api/auth/profile-update",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="telephone", type="string", format="0987654321"),
+     *             @OA\Property(property="gender", type="number", format="number"),
+     *             @OA\Property(property="birthday", type="string", format="date", example="2000-01-01"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function profileUpdate(Request $request)
     {
         $validator = Validator::make($request->all(), [
