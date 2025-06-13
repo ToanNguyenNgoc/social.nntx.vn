@@ -13,7 +13,6 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__ . '/../routes/channels.php',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        \App\Http\Middleware\TrustProxies::class;
         // API group middleware
         $middleware->alias([
             'auth' => \App\Http\Middleware\ApiAuthenticate::class,

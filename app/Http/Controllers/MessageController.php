@@ -19,6 +19,28 @@ class MessageController extends Controller
         $this->user = $this->onUserAuth();
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/messages",
+     *     summary="messages.index",
+     *     tags={"Messages"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="topic_id", in="query", required=true),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", example=15)),
+     *     @OA\Parameter(name="include", in="query", required=false, description="favorites|reply"),
+     *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function index(Request $request)
     {
         $topic = $request->get('topic');
@@ -26,11 +48,47 @@ class MessageController extends Controller
         return $this->jsonResponse($messages->paginate());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/messages/{id}",
+     *     summary="messages.show",
+     *     tags={"Messages"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="topic_id", in="query", required=true),
+     *     @OA\Parameter(name="include", in="query", required=false, description="favorites|reply"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function show(int $id)
     {
         return $this->jsonResponse($this->message_repo->findOrFail($id));
     }
 
+     /**
+     * @OA\Post(
+     *     path="/api/messages",
+     *     summary="messages.store",
+     *     tags={"Messages"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"topic_id","body","media_ids"},
+     *             @OA\Property(property="topic_id", type="integer"),
+     *             @OA\Property(property="body", type="string"),
+     *             @OA\Property(property="reply_id", type="integer"),
+     *             @OA\Property(property="media_ids", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

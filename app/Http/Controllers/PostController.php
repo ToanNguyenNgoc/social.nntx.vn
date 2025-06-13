@@ -15,16 +15,74 @@ class PostController extends Controller
     //
     public function __construct(protected PostRepo $post_repo) {}
 
+    /**
+     * @OA\Get(
+     *     path="/api/posts",
+     *     summary="posts.index",
+     *     tags={"Posts"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", example=15)),
+     *     @OA\Parameter(name="filter[keyword]", in="query", required=false),
+     *     @OA\Parameter(name="filter[status]", in="query", required=false, @OA\Schema(type="boolean", example=true)),
+     *     @OA\Parameter(name="include", in="query", required=false, description="user|favorites"),
+     *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function index()
     {
         return $this->jsonResponse($this->post_repo->paginate());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/posts/{id}",
+     *     summary="posts.show",
+     *     tags={"Posts"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\Parameter(name="include", in="query", required=false, description="user|favorites"),
+     *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function show(int $id)
     {
         return $this->jsonResponse($this->post_repo->findOrFail($id));
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/posts",
+     *     summary="posts.store",
+     *     tags={"Posts"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"content","media_ids"},
+     *             @OA\Property(property="content", type="string"),
+     *             @OA\Property(property="media_ids", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -45,6 +103,27 @@ class PostController extends Controller
         return $this->jsonResponse($post->refresh());
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/posts/{id}",
+     *     summary="posts.update",
+     *     tags={"Posts"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"content","media_ids"},
+     *             @OA\Property(property="content", type="string"),
+     *             @OA\Property(property="media_ids", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
@@ -61,6 +140,19 @@ class PostController extends Controller
         return $this->jsonResponse($post->refresh());
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/posts/{id}",
+     *     summary="posts.destroy",
+     *     tags={"Posts"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\Response(
+     *         response=202,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function destroy(int $id)
     {
         Post::where('user_id', $this->onUserAuth()->id)->findOrFail($id)->delete();

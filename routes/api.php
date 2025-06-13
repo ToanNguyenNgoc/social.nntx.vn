@@ -31,8 +31,8 @@ Route::middleware('throttle:api')->group(function () {
             Route::post('/profile-update', [AuthController::class, 'profileUpdate'])->name('profile.update');
         });
         Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
-            Route::get('/', [UserController::class, 'index'])->name('index');
-            Route::get('/{id}', [UserController::class, 'show'])->name('show');
+            Route::get('/', [UserController::class, 'index'])->name('users.index');
+            Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
         });
         //Media
         Route::post('/media', [MediaController::class, 'store'])->name('media.store');

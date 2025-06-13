@@ -17,6 +17,27 @@ class TopicController extends Controller
         $this->user = $this->onUserAuth();
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/topics",
+     *     summary="topics.index",
+     *     tags={"Topics"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", example=15)),
+     *     @OA\Parameter(name="include", in="query", required=false, description="users|messages|last_message"),
+     *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at, -updated_at"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function index()
     {
         $topics = $this->topic_repo->filter->whereHas('topicUsers', function ($query) {
@@ -25,6 +46,21 @@ class TopicController extends Controller
         return $this->jsonResponse($topics->paginate());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/topics/{id}",
+     *     summary="topics.show",
+     *     tags={"Topics"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\Parameter(name="include", in="query", required=false, description="users|messages|last_message"),
+     *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at, -updated_at"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function show(int $id)
     {
         $topic = $this->topic_repo->filter
@@ -37,6 +73,28 @@ class TopicController extends Controller
         return $this->jsonResponse($topic);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/topics",
+     *     summary="topics.store",
+     *     tags={"Topics"},
+     *     security={{"bearerAuth": {}}},
+     *     description="type: DUOS, GROUP",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"recipient_ids","type"},
+     *             @OA\Property(property="name", type="string"),
+     *             @OA\Property(property="recipient_ids", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="type", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -76,6 +134,20 @@ class TopicController extends Controller
         return $this->jsonResponse($topic);
     }
 
+
+    /**
+     * @OA\Delete(
+     *     path="/api/topics/{id}",
+     *     summary="topics.destroy",
+     *     tags={"Topics"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\Response(
+     *         response=202,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function destroy(int $id)
     {
         $topic = $this->topic_repo->filter

@@ -11,6 +11,34 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileUnacceptableForCollectio
 class MediaController extends Controller
 {
     //
+    /**
+     * @OA\Post(
+     *     path="/api/media",
+     *     summary="media.store",
+     *     tags={"Media"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"file"},
+     *                 @OA\Property(
+     *                     description="File",
+     *                     property="file",
+     *                     type="string",
+     *                     format="binary"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
+
     public function store()
     {
         try {

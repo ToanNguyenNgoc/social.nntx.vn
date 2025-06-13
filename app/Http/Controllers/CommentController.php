@@ -14,16 +14,77 @@ class CommentController extends Controller
 {
     public function __construct(protected CommentRepo $comment_repo) {}
     //
+
+    /**
+     * @OA\Get(
+     *     path="/api/comments",
+     *     summary="comments.index",
+     *     tags={"Comments"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", example=15)),
+     *     @OA\Parameter(name="filter[commentable_type]", in="query", required=false, @OA\Schema(type="array", @OA\Items(type="string", enum={"POST","REPLY_COMMENT"}))),
+     *     @OA\Parameter(name="filter[commentable_id]", in="query", required=false),
+     *     @OA\Parameter(name="include", in="query", required=false, description="user|favorites"),
+     *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function index(Request $request)
     {
         return $this->jsonResponse($this->comment_repo->paginate());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/comments/{id}",
+     *     summary="comments.show",
+     *     tags={"Comments"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\Parameter(name="include", in="query", required=false, description="user|favorites"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function show(int $id)
     {
         return $this->jsonResponse($this->comment_repo->findOrFail($id));
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/comments",
+     *     summary="comments.store",
+     *     tags={"Comments"},
+     *     security={{"bearerAuth": {}}},
+     *     description="commentable_type: POST, REPLY_COMMENT",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"commentable_id","commentable_type","body","media_ids"},
+     *             @OA\Property(property="commentable_id", type="integer"),
+     *             @OA\Property(property="commentable_type", type="string"),
+     *             @OA\Property(property="body", type="string"),
+     *             @OA\Property(property="media_ids", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -52,6 +113,25 @@ class CommentController extends Controller
         return $this->jsonResponse($comment);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/comments/{id}",
+     *     summary="comments.update",
+     *     tags={"Comments"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="body", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
@@ -63,6 +143,19 @@ class CommentController extends Controller
         return $this->jsonResponse($comment->refresh());
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/comments/{id}",
+     *     summary="comments.destroy",
+     *     tags={"Comments"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\Response(
+     *         response=202,
+     *         description="Success",
+     *     ),
+     * )
+     */
     public function destroy(int $id)
     {
         Comment::where('user_id', $this->onUserAuth()->id)->findOrFail($id)->delete();
