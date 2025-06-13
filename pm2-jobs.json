@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "social.nntx.vn:8000",
-      "script": "php artisan serve --port=8000",
+      "script": "php artisan l5-swagger:generate && php artisan serve --port=8000",
       "node_args": ""
     }
   ]

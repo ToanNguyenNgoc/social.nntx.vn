@@ -126,7 +126,10 @@
         const urls = [];
 
         @foreach($urlsToDocs as $title => $url)
-            urls.push({name: "{{ $title }}", url: "{{ $url }}"});
+            @php
+                $finalUrl = app()->environment('production') ? preg_replace('/^http:/', 'https:', $url) : $url;
+            @endphp
+            urls.push({name: "{{ $title }}", url: "{{ $finalUrl }}"});
         @endforeach
 
         // Build a system
