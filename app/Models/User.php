@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\LocalizesTimestamps;
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -96,9 +97,9 @@ class User extends Authenticatable implements HasMedia
             ->singleFile();
     }
     public function getAvatarAttribute(): null|string
-    {   
+    {
         $avatar = $this->getFirstMedia(MediaTemporary::COLLECTION_AVATAR)?->getFullUrl();
-        if($avatar) return $avatar;
+        if ($avatar) return $avatar;
         return $this->avatar_social_url;
     }
 
@@ -125,5 +126,10 @@ class User extends Authenticatable implements HasMedia
         return $query->where('name', 'like', $value)
             ->orWhere('telephone', 'like', $value)
             ->orWhere('email', 'like', $value);
+    }
+    //Stories
+    public function stories(): HasMany
+    {
+        return $this->hasMany(Story::class, 'user_id', 'id');
     }
 }

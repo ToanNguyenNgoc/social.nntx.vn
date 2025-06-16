@@ -51,7 +51,6 @@ class PostController extends Controller
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(name="id", in="path", required=true),
      *     @OA\Parameter(name="include", in="query", required=false, description="user|favorites"),
-     *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at"),
      *     @OA\Response(
      *         response=200,
      *         description="Success",

@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Favorite;
 use App\Models\Message;
 use App\Models\Post;
+use App\Models\Story;
 use App\Repositories\FavoriteRepo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -57,7 +58,7 @@ class FavoriteController extends Controller
      *     summary="favorites.store",
      *     tags={"Favorites"},
      *     security={{"bearerAuth": {}}},
-     *     description="favoritetable_type: POST, COMMENT, MESSAGE",
+     *     description="favoritetable_type: POST, COMMENT, MESSAGE, STORY",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -92,6 +93,10 @@ class FavoriteController extends Controller
         if ($favoritetable_type == Favorite::TYPE_MESSAGE) {
             $model_type = Message::class;
             $favoritetable = Message::findOrFail($favoritetable_id);
+        }
+        if($favoritetable_type == Favorite::TYPE_STORY){
+            $model_type = Story::class;
+            $favoritetable = Story::findOrFail($favoritetable_id);
         }
 
         $favorite_prev = Favorite::where([

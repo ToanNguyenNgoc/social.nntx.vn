@@ -9,8 +9,11 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StoryController;
+use App\Http\Controllers\StoryViewController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserController;
+use App\Models\StoryView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Log;
@@ -76,5 +79,13 @@ Route::middleware('throttle:api')->group(function () {
         Route::get('/messages', [MessageController::class, 'index'])->name('messages.index')->middleware(['check_topic_joined']);
         Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show')->middleware(['check_topic_joined']);
         Route::post('/messages', [MessageController::class, 'store'])->name('messages.store')->middleware(['check_topic_joined']);
+        //Story
+        Route::get('/stories', [StoryController::class, 'index'])->name('stories.index');
+        Route::get('/stories/{id}', [StoryController::class, 'show'])->name('stories.show');
+        Route::post('/stories', [StoryController::class, 'store'])->name('stories.store');
+        Route::delete('/stories/{id}', [StoryController::class, 'destroy'])->name('stories.destroy');
+
+        Route::get('/stories-views',[StoryViewController::class,'index'])->name('stories-views.index');
+        Route::post('/stories-views',[StoryViewController::class,'store'])->name('stories-views.store');
     });
 });

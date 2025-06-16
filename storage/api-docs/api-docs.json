@@ -466,7 +466,7 @@
                     "Favorites"
                 ],
                 "summary": "favorites.store",
-                "description": "favoritetable_type: POST, COMMENT, MESSAGE",
+                "description": "favoritetable_type: POST, COMMENT, MESSAGE, STORY",
                 "operationId": "370ffab0458b21c048b584dc20d059e0",
                 "requestBody": {
                     "required": true,
@@ -1011,12 +1011,6 @@
                         "in": "query",
                         "description": "user|favorites",
                         "required": false
-                    },
-                    {
-                        "name": "sort",
-                        "in": "query",
-                        "description": "-id, -created_at",
-                        "required": false
                     }
                 ],
                 "responses": {
@@ -1285,6 +1279,234 @@
                 ],
                 "responses": {
                     "202": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stories": {
+            "get": {
+                "tags": [
+                    "Stories"
+                ],
+                "summary": "stories.index",
+                "operationId": "16620e7cc42f977ac888f825133851c5",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 15
+                        }
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "favorites|views",
+                        "required": false
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "-id, -created_at",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Stories"
+                ],
+                "summary": "stories.store",
+                "operationId": "6d05b330fcdca8248b81afc179ca4c13",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content",
+                                    "media_id"
+                                ],
+                                "properties": {
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "media_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stories/{id}": {
+            "get": {
+                "tags": [
+                    "Stories"
+                ],
+                "summary": "stories.show",
+                "operationId": "e384c0507ded5cbed42584fe29f649a2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "favorites|views",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Stories"
+                ],
+                "summary": "stories.destroy",
+                "operationId": "68e0ce5276d043960434ccb1dcb4681d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stories-views": {
+            "get": {
+                "tags": [
+                    "Stories"
+                ],
+                "summary": "stories-views.index",
+                "description": "Get stories for client",
+                "operationId": "bb544f4dcd2d8289ed407e36e59a2743",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 15
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "-id, -created_at",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Stories"
+                ],
+                "summary": "stories-views.store",
+                "description": "Client posts view a story",
+                "operationId": "9c822a3807ab9d8833a3a60be40b8a39",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "story_id"
+                                ],
+                                "properties": {
+                                    "story_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
                         "description": "Success"
                     }
                 },
@@ -1580,6 +1802,10 @@
         {
             "name": "Posts",
             "description": "Posts"
+        },
+        {
+            "name": "Stories",
+            "description": "Stories"
         },
         {
             "name": "Topics",

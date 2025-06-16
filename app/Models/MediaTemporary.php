@@ -34,6 +34,7 @@ class MediaTemporary extends Model implements HasMedia
     const COLLECTION_BRAND_APP_BUNDLE = 'brand_app_version_bundle';
     const COLLECTION_ORGANIZATION_TREND_THUMBNAIL = 'organization_trend_thumbnail';
     const COLLECTION_ORGANIZATION_TREND = 'organization_trend';
+    const COLLECTION_STORY = 'story';
 
     // const RESOLUTION = [
     //     self::CI_AVATAR => [250, 250],
