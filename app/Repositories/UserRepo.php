@@ -21,6 +21,7 @@ class UserRepo extends BaseRepository
   {
     return [
       AllowedFilter::scope('keyword'),
+      AllowedFilter::callback('id', fn($builder, $value) => $builder->where('id', $value)),
     ];
   }
   public function getSorts(): array
@@ -37,6 +38,6 @@ class UserRepo extends BaseRepository
   }
   public function getIncludes(): array
   {
-    return ['roles','followers'];
+    return ['roles', 'followers'];
   }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Follow;
 use App\Models\Story;
 use App\Models\StoryView;
 use App\Repositories\UserRepo;
@@ -24,6 +23,7 @@ class StoryViewController extends Controller
      *     description="Get stories for client",
      *     @OA\Parameter(name="page",in="query",required=false,@OA\Schema(type="integer", example=1)),
      *     @OA\Parameter(name="limit", in="query", required=false, @OA\Schema(type="integer", example=15)),
+     *     @OA\Parameter(name="filter[id]", in="query", required=false, description="Id of user"),
      *     @OA\Parameter(name="sort", in="query", required=false, description="-id, -created_at"),
      *     @OA\Response(
      *         response=200,

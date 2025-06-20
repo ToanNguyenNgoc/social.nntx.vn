@@ -1463,6 +1463,12 @@
                         }
                     },
                     {
+                        "name": "filter[id]",
+                        "in": "query",
+                        "description": "Id of user",
+                        "required": false
+                    },
+                    {
                         "name": "sort",
                         "in": "query",
                         "description": "-id, -created_at",
