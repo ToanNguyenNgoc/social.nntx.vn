@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegisterEvent;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepo;
 use App\Services\RabbitMQPublisher;
@@ -34,8 +35,12 @@ class UserController extends Controller
    */
   public function index()
   {
-    $data = ['id' => 123, 'name' => json_encode($this->user_repo->paginate())];
-    app(RabbitMQPublisher::class)->publish($data, 'user.created');
+    $data = ['id' => 123, 'name' => 'Long Chim'];
+    app(RabbitMQPublisher::class)->publish($data, RabbitMQPublisher::PARTNER_USER_REGISTER);
+    // UserRegisterEvent::dispatch([
+    //   'id'=>123,
+    //   'name' => 'Long Chim'
+    // ]);
     return $this->jsonResponse($this->user_repo->paginate());
   }
 

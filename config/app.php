@@ -142,5 +142,12 @@ return [
         ],
     ],
 
+    'rabbit_mq' => [
+        'host' => env('RABBIT_MQ_HOST','localhost'),
+        'port' => env('RABBIT_MQ_PORT', 5672),
+        'user' => env('RABBIT_MQ_USER','user'),
+        'password' => env('RABBIT_MQ_PASSWORD',''),
+    ],
+
 
 ];

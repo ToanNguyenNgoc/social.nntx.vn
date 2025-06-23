@@ -9,19 +9,17 @@ use Illuminate\Support\Facades\Log;
 
 class RabbitMQPublisher
 {
-  protected string $host = 'localhost';
-  protected int $port = 5672;
-  protected string $user = 'guest';
-  protected string $password = 'guest';
 
-  public function publish(array $payload, string $pattern = 'user.created', string $exchange = 'nestjs_exchange'): bool
+  const PARTNER_USER_REGISTER = 'user.register';
+
+  public function publish(array $payload, string $pattern = 'user.register', string $exchange = 'nestjs_exchange'): bool
   {
     try {
       $connection = new AMQPStreamConnection(
-        $this->host,
-        $this->port,
-        $this->user,
-        $this->password
+        config('app.rabbit_mq.host'),
+        config('app.rabbit_mq.port'),
+        config('app.rabbit_mq.user'),
+        config('app.rabbit_mq.password')
       );
       $channel = $connection->channel();
 
